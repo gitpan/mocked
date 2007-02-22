@@ -13,5 +13,6 @@ lib/mocked.pm
 Makefile.PL
 MANIFEST			This list of files
 META.yml
+README
 t/mocked.t
 t/TestUtils.pm
