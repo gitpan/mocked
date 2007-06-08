@@ -1,6 +1,7 @@
 package mocked;
 use strict;
 use warnings;
+use base 'Exporter'; # load this so mocked libraries can export things
 
 =head1 NAME
 
@@ -34,7 +35,7 @@ maintainers.
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 FUNCTIONS
 
@@ -52,8 +53,15 @@ sub import {
     my $class = shift;
     my $module = shift;
  
-    if(exists $INC{ convert_package_to_file($module) }){
-      die q{Attempting to mock an already loaded library};
+    {
+      no strict 'refs';
+      my $sym = $module . '::';
+      if(
+          exists $INC{ convert_package_to_file($module) } 
+          || (keys %{$sym})
+        ){
+        die q{Attempting to mock an already loaded library};
+      }
     }
 
     my $mock_path = 't/lib';
